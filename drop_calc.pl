@@ -77,17 +77,6 @@ Another way to do this is Hoppy\'s method of targeting the color yellow, which i
 		{
 			$co2_min = $co2 + $margin;
 			$co2_max = $co2 - $margin;
-		}
-		else
-		{
-			$co2_min_min= 3 * $dkh * ( 10 ** ( 7 - $ph_high ));
-			$co2_min= 3 * $dkh * ( 10 ** ( 7 - $ph_low ));
-			$dkh_min=$dkh;
-			$co2_min_perfect=$co2;
-		}
-		
-		if ($checkers=~/two/)
-		{
 #the high range
 			$dkh_max = $co2_max / ( 3 * ( 10 ** ( 7 - $ph_high ) ));
 			$co2_max_max = 3 * $dkh_max * ( 10 ** ( 7 - $ph_low ));
@@ -97,7 +86,14 @@ Another way to do this is Hoppy\'s method of targeting the color yellow, which i
 			$co2_min_min= 3 * $dkh_min * ( 10 ** (7 - $ph_high));
 			$co2_min_perfect = 3 * $dkh_min* ( 10 ** (7 - $ph_perfect));
 		}
-
+		else
+		{
+			$co2_min_min= 3 * $dkh * ( 10 ** ( 7 - $ph_high ));
+			$co2_min= 3 * $dkh * ( 10 ** ( 7 - $ph_low ));
+			$dkh_min=$dkh;
+			$co2_min_perfect=$co2;
+		}
+		
 # dKH less than 1dKH is inaccurate.
 
 		if ( ($dkh_min <=1) || ($dkh_max <= 1) )
