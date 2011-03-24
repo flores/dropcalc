@@ -36,12 +36,14 @@ print "<h4><a href='#'>How it works</a></h4>
 <div>
 This calculator allows you to make a reference KH solution for a CO2 drop checker using some container, NaHCO3 (baking soda), Bromothymol blue (such as from a low-range AP pH test kit), and any target CO2 ppm.  Keep in mind that this target should be the perfect green on your drop checker (6.6 pH).  This calculator assumes humans can see \"green\" at +/- 0.2pH.<br />\n
 <img src=\"/public/d1_small.jpg\"><br />\n<br />\n
-So, if we use that assumption with two drop checkers, we can calculate CO2 anywhere from +/- 2.5ppm to 20ppm.<br />\n
+So, if we use that assumption with two drop checkers, we can calculate CO2 anywhere from +/- 2.5ppm to 30ppm.<br />\n
 <img src=\"/public/d2_small.jpg\"><br />\n<br />\n
 pat_w provides another example.<br />\n
-<img src=\"/public/patw_example.jpg\"<br />\n<br />\n
+<img src=\"/public/patw_example.jpg\"<br />\n
+<h6>image courtesy of pat_w</h6><br />\n
 Another way to do this is Hoppy\'s method of targeting the color yellow, which is much easier for some to read.<br />
-<img src=\"/public/yellow.jpg\">
+<img src=\"/public/yellow.jpg\"><br />
+<h6>image courtesy of hoppycalif</h6><br />
 </div>";
 
 print "<h4><a href='#'>Calculator</a></h4>";
@@ -190,7 +192,11 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 	$co2_max_max = sprintf("%.1f", $co2_max_max);
 	$co2_min_min = sprintf("%.1f", $co2_min_min);
 
-	      	print "1) Add $mgrams_min mg of baking soda to $mix $unit of DI water for $dkh_min dKH. Fully dilute.<br />\n
+# now convert it into grams for the majority of scales
+	$grams_max = $mgrams_max * 1000;
+	$grams_min = $mgrams_min * 1000;
+
+	      	print "1) Add $grams_min grams of baking soda to $mix $unit of RO/DI water for $dkh_min dKH. Fully dilute.<br />\n
 	        2) Add the contents of this mixture to the drop checker, then add a couple drops of Bromothymol blue to the drop checker.<br />\n";
 	if ($color = 'green')
 	{
@@ -200,7 +206,7 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 <br />\n";
 	if ($checkers=~/two/)
 	{
-		print "3) Add $mgrams_max mg of baking soda to $mix $unit of DI water for $dkh_max dKH. Fully dilute.<br />\n
+		print "3) Add $grams_max grams of baking soda to $mix $unit of RO/DI water for $dkh_max dKH. Fully dilute.<br />\n
 	                    4) Add the contents of this mixture to the second drop checker, then add a couple drops of Bromothymol blue to that drop checker.<br />\n";
 		if ($color = 'green')
 		{
@@ -286,37 +292,39 @@ sub printForm {
 	print "<table>";
 	print "<tr>";
 	print "<td align='right'>";
-	print "My target CO2 is ";
+	print "My target CO2 is";
 	print "</td>";
 	print "<td>";
 	print $q->textfield(-name=>'co2',-size=>1,-maxlength=>5);
-	print " ppm";
+	print "ppm";
 	print "</td></tr>";
-	print "<tr><td>";
-	print "with a margin of error of +/- ";
+	print "<tr><td align='right'>";
+	print "margin of error +/-";
 	print "</td><td>";
         print $q->popup_menu( -name=>'range', -values=>['2.5','5','10','15','20','25','30'], -default=>'5' );
-	print " ppm.";
+	print " ppm CO2";
 	print "</td></tr>";
 	print "<tr><td colspan=2> </td></tr>";
 	print "<tr><td align='right'>";
-	print "My container is ";
+	print "I'm mixing the solution in";
 	print "</td><td>";
 	print $q->textfield(-name=>'mix',-size=>1,-maxlength=>5);
 	print $q->radio_group( -name=>'unit', values=>['L', 'gal'], -default=>'Liter');
+	print "of water";
 	print "</td></tr>";
 
 	print "<tr><td colspan=2> </td></tr>";
 	print "<tr><td align='right'>";
-	print "I find it easiest to see ";
+	print "it's easiest to see";
 	print "</td><td>";
 	print $q->radio_group( -name=>'color', values=>['green', 'yellow'], -default=>'green');
 	print "</td></tr>";
 	print "<tr><td colspan=2> </td></tr>";
 	print "<tr><td align='right'>";
-	print "Number of drop checkers ";
+	print "and I'm using";
 	print "</td><td>";
 	print $q->radio_group( -name=>'checkers', values=>['one', 'two'], -default=>'two');
+	print "dropcheckers";
 	print "</td></tr>";
 
 	print "<tr><td colspan=2, align='center'>";
