@@ -167,7 +167,7 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 	}
 
 #1 liter of distilled water with a 5 dKH .15 grams (actually .14994)
-	if ($unit=~/gallon/i)
+	if ($unit=~/gal/i)
 	{
 		$dil=$mix*3.78541178;
 	}
@@ -176,14 +176,36 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 		$dil=$mix;
 	}
 	
-	$mgrams_max=(($dkh_max*$dil)/33.346672) / 1000;
-	$mgrams_min=(($dkh_min*$dil)/33.346672) / 1000;
+	$mgrams_max=($dkh_max*$dil*30);
+	$mgrams_min=($dkh_min*$dil*30);
 
-#	  $grams=(($dkh*$dil)/30.02);
-  
+# make it mg if less than 1g, g elsewise
+
+	if ($mgrams_max > 1000)
+	{
+		$output_max = $mgrams_max / 1000;
+		$output_max_units = 'grams';
+	{
+	else
+	{
+		$output_max = $mgrams_max;
+		$output_max_units = 'milligrams';
+	}
+	
+	if ($mgrams_min > 1000)
+	{
+		$output_min = $mgrams_min / 1000;
+		$output_max_units = 'grams';
+	{
+	else
+	{
+		$output_min = $mgrams_min;
+		$output_min_units = 'milligrams';
+	}
+
 	$dkh = sprintf("%.3f", $dkh);
-	$mgrams_max = sprintf("%.1f", $mgrams_max);
-	$mgrams_min = sprintf("%.1f", $mgrams_min);
+	$output_max = sprintf("%.1f", $output_max);
+	$output_min = sprintf("%.1f", $output_min);
 	$dkh_min = sprintf("%.2f", $dkh_min);
 	$dkh_max = sprintf("%.2f", $dkh_max);
 	$co2_min = sprintf("%.1f", $co2_min);
@@ -192,11 +214,7 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 	$co2_max_max = sprintf("%.1f", $co2_max_max);
 	$co2_min_min = sprintf("%.1f", $co2_min_min);
 
-# now convert it into grams for the majority of scales
-	$grams_max = $mgrams_max * 1000;
-	$grams_min = $mgrams_min * 1000;
-
-	      	print "1) Add $grams_min grams of baking soda to $mix $unit of RO/DI water for $dkh_min dKH. Fully dilute.<br />\n
+	      	print "1) Add $output_min $output_min_units of baking soda to $mix $unit of RO/DI water for $dkh_min dKH. Fully dilute.<br />\n
 	        2) Add the contents of this mixture to the drop checker, then add a couple drops of Bromothymol blue to the drop checker.<br />\n";
 	if ($color = 'green')
 	{
@@ -206,7 +224,7 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 <br />\n";
 	if ($checkers=~/two/)
 	{
-		print "3) Add $grams_max grams of baking soda to $mix $unit of RO/DI water for $dkh_max dKH. Fully dilute.<br />\n
+		print "3) Add $output_max $output_max_units of baking soda to $mix $unit of RO/DI water for $dkh_max dKH. Fully dilute.<br />\n
 	                    4) Add the contents of this mixture to the second drop checker, then add a couple drops of Bromothymol blue to that drop checker.<br />\n";
 		if ($color = 'green')
 		{
