@@ -176,8 +176,8 @@ if ($q->cgi->var('REQUEST_METHOD') eq 'GET') {
 		$dil=$mix;
 	}
 	
-	$mgrams_max=(($dkh_max*$dil)/33.346672)*1000;
-	$mgrams_min=(($dkh_min*$dil)/33.346672)*1000;
+	$mgrams_max=(($dkh_max*$dil)/33.346672) / 1000;
+	$mgrams_min=(($dkh_min*$dil)/33.346672) / 1000;
 
 #	  $grams=(($dkh*$dil)/30.02);
   
